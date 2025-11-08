@@ -4,6 +4,7 @@
 
 import os
 import re
+import json
 import pdfplumber
 from datetime import datetime
 from dateutil import parser as dateparser
@@ -11,9 +12,9 @@ from dateutil import parser as dateparser
 # if you get more vendor names in the future, add them here
 COMPANY_NORMALIZATION = {
     # full/contains               -> short name
-    "meriwether pest & wildlife": "Meriwether",
-    "meriwether pest": "Meriwether",
-    "meriwether": "Meriwether",
+    "meriwether pest & wildlife": "Meriwether Pest",
+    "meriwether pest": "Meriwether Pest",
+    "meriwether": "Meriwether Pest",
 }
 
 
@@ -140,11 +141,21 @@ def process_invoice(pdf_path: str, rename: bool = True) -> str:
         data.get("invoice_number") or ""
     )
 
+    folder = os.path.dirname(pdf_path)
+    new_path = os.path.join(folder, new_name)
+
+    result = {
+        "fileName": new_path,
+        "company": short_company,
+        "amount": data["amount"],
+        "date": data["service_date"].strftime("%Y-%m-%d"),
+        "invoice": data["invoice_number"]
+    }
+
+    print(json.dumps(result))
+
     if rename:
-        folder = os.path.dirname(pdf_path)
-        new_path = os.path.join(folder, new_name)
         os.rename(pdf_path, new_path)
-        print(f"Renamed to: {new_path}")
         return new_path
     else:
         print("Would rename to:", new_name)
