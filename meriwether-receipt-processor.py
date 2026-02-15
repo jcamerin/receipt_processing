@@ -149,7 +149,8 @@ def process_invoice(pdf_path: str, rename: bool = True) -> str:
         "company": short_company,
         "amount": data["amount"],
         "date": data["service_date"].strftime("%Y-%m-%d"),
-        "invoice": data["invoice_number"]
+        "invoice": data["invoice_number"],
+        "description": "Rodent Control - Monthly",
     }
 
     print(json.dumps(result))

@@ -202,6 +202,7 @@ def main():
         "company": company,
         "amount": amount,
         "date": date_iso,
+        "description": "Termite Quarterly",
     }
 
     print(json.dumps(result, indent=2))
